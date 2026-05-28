@@ -15,7 +15,7 @@ Villager-style spacebar quick-craft for crafting screens. Stonecutter: Space = c
 [[dependencies.${mod_id}]]
 modId="neoforge"
 type="required"
-versionRange="[${neo_version},)"
+versionRange="[21.1,)"
 ordering="NONE"
 side="CLIENT"
 

@@ -44,5 +44,6 @@ repo/
 
 ### Local working notes ###
 .orchestrate/
+.claude/
 PLAN.md
 CLAUDE.md

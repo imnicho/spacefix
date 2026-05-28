@@ -34,7 +34,7 @@ client already sends, so the server needs no awareness of the mod.
 ## Requirements
 
 - Minecraft 1.21.1
-- NeoForge 21.1.231 or newer
+- NeoForge for Minecraft 1.21.1 (any 21.1.x)
 - Java 21 (only needed to build from source)
 
 ## Building
