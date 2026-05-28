@@ -8,6 +8,9 @@ public interface SpacebarAction {
 
     boolean doOne(Minecraft mc, Screen screen);
 
+    default void observe(Screen screen) {
+    }
+
     default void reset() {
     }
 }

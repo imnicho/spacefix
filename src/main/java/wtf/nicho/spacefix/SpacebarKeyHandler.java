@@ -17,20 +17,29 @@ public class SpacebarKeyHandler {
     private Screen lastScreen;
 
     @SubscribeEvent
-    public void onKeyPressed(ScreenEvent.KeyPressed.Pre event) {
+    public void onScreenRender(ScreenEvent.Render.Post event) {
         Screen screen = event.getScreen();
-
         if (screen != lastScreen) {
             lastScreen = screen;
             for (SpacebarAction action : actions) {
                 action.reset();
             }
         }
+        for (SpacebarAction action : actions) {
+            if (action.handles(screen)) {
+                action.observe(screen);
+                break;
+            }
+        }
+    }
 
+    @SubscribeEvent
+    public void onKeyPressed(ScreenEvent.KeyPressed.Pre event) {
         if (event.getKeyCode() != GLFW.GLFW_KEY_SPACE) {
             return;
         }
 
+        Screen screen = event.getScreen();
         SpacebarAction action = null;
         for (SpacebarAction candidate : actions) {
             if (candidate.handles(screen)) {

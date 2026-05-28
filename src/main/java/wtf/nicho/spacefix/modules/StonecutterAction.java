@@ -30,6 +30,20 @@ public class StonecutterAction implements SpacebarAction {
     }
 
     @Override
+    public void observe(Screen screen) {
+        StonecutterMenu menu = ((StonecutterScreen) screen).getMenu();
+        int selected = menu.getSelectedRecipeIndex();
+        if (selected < 0) {
+            return;
+        }
+        Slot inputSlot = menu.getSlot(StonecutterMenu.INPUT_SLOT);
+        if (inputSlot.hasItem()) {
+            lastMaterial = inputSlot.getItem().getItem();
+            lastRecipeIndex = selected;
+        }
+    }
+
+    @Override
     public boolean doOne(Minecraft mc, Screen screen) {
         if (mc.player == null || mc.gameMode == null) {
             return false;
@@ -40,7 +54,10 @@ public class StonecutterAction implements SpacebarAction {
         Player player = mc.player;
         Slot inputSlot = menu.getSlot(StonecutterMenu.INPUT_SLOT);
 
-        Item material = inputSlot.hasItem() ? inputSlot.getItem().getItem() : lastMaterial;
+        Item rememberedMaterial = lastMaterial;
+        int rememberedRecipe = lastRecipeIndex;
+
+        Item material = inputSlot.hasItem() ? inputSlot.getItem().getItem() : rememberedMaterial;
         if (material == null) {
             return false;
         }
@@ -61,19 +78,22 @@ public class StonecutterAction implements SpacebarAction {
         if (!inputSlot.hasItem()) {
             return false;
         }
-
-        lastMaterial = inputSlot.getItem().getItem();
+        Item actualMaterial = inputSlot.getItem().getItem();
 
         if (menu.getSelectedRecipeIndex() < 0) {
-            if (lastRecipeIndex < 0 || !menu.clickMenuButton(player, lastRecipeIndex)) {
+            if (rememberedRecipe < 0 || rememberedMaterial != actualMaterial) {
                 return false;
             }
-            mc.gameMode.handleInventoryButtonClick(containerId, lastRecipeIndex);
+            menu.clickMenuButton(player, rememberedRecipe);
+            mc.gameMode.handleInventoryButtonClick(containerId, rememberedRecipe);
         }
-        lastRecipeIndex = menu.getSelectedRecipeIndex();
-        if (lastRecipeIndex < 0) {
+
+        int selected = menu.getSelectedRecipeIndex();
+        if (selected < 0) {
             return false;
         }
+        lastMaterial = actualMaterial;
+        lastRecipeIndex = selected;
 
         if (!menu.getSlot(StonecutterMenu.RESULT_SLOT).hasItem()) {
             return false;
@@ -81,7 +101,6 @@ public class StonecutterAction implements SpacebarAction {
 
         int before = inputSlot.getItem().getCount();
         mc.gameMode.handleInventoryMouseClick(containerId, StonecutterMenu.RESULT_SLOT, 0, ClickType.QUICK_MOVE, player);
-
         return inputSlot.getItem().getCount() != before;
     }
 

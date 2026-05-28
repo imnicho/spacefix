@@ -8,14 +8,17 @@ crafting screens lack any equivalent. SpaceFix fixes that, starting with the **s
 
 ## What it does
 
-With a recipe selected in the stonecutter:
+Pick a recipe in the stonecutter once — just click it as you normally would. SpaceFix remembers
+that choice (per material), so you don't have to re-select it every time the input runs dry. Then:
 
 - **Space** — cut one full input stack. If the input slot is empty or partial, it's topped up to
-  a full stack from your inventory (same material) first, then the whole stack is cut.
+  a full stack from your inventory (same material) first, the recipe is re-selected, then the
+  whole stack is cut.
 - **Shift + Space** — bulk mode. Repeatedly refill the input, re-select the recipe, and cut until
   no matching material is left in your inventory or your inventory is full.
 
-No keybind to configure — it mirrors villager trading and uses Space directly.
+No keybind to configure — it mirrors villager trading and uses Space directly. (Just like a
+villager trade, you select what you want once; Space repeats it.)
 
 ## Client-side only
 
