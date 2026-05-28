@@ -13,9 +13,13 @@ that choice (per material), so you don't have to re-select it every time the inp
 
 - **Space** — cut one full input stack. If the input slot is empty or partial, it's topped up to
   a full stack from your inventory (same material) first, the recipe is re-selected, then the
-  whole stack is cut.
-- **Shift + Space** — bulk mode. Repeatedly refill the input, re-select the recipe, and cut until
-  no matching material is left in your inventory or your inventory is full.
+  whole stack is cut. You see the input fill, then cut a moment later, with a stonecutter sound.
+- **Shift + Space** — bulk mode. It refills the input, re-selects the recipe, and cuts, over and
+  over, until no matching material is left in your inventory or your inventory is full.
+
+Cutting plays out one stack at a time rather than vanishing in a single frame: each refill→cut
+cycle is spaced a few ticks apart and a stonecutter sound plays on every cut, so a big bulk run
+looks and sounds like work being done.
 
 No keybind to configure — it mirrors villager trading and uses Space directly. (Just like a
 villager trade, you select what you want once; Space repeats it.)
@@ -52,9 +56,9 @@ To launch a development client for testing:
 ## Extending it
 
 The mod is built around a small registry of per-screen handlers. Each screen plugs in through the
-`SpacebarAction` interface — `handles(screen)`, `doOne(...)`, and `reset()` — and is registered in
-a single list in `SpacebarKeyHandler`. Adding support for a new screen is a matter of writing one
-class and registering it; no changes to the dispatch logic.
+`SpacebarAction` interface — `handles(screen)`, `prepareCut(...)`, `executeCut(...)`, and
+`reset()` — and is registered in a single list in `SpacebarKeyHandler`. Adding support for a new
+screen is a matter of writing one class and registering it; no changes to the dispatch logic.
 
 The stonecutter is the only module shipped today. The loom, smithing table, and the crafting-table
 recipe book are natural next fits and are planned.

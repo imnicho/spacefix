@@ -44,11 +44,10 @@ public class StonecutterAction implements SpacebarAction {
     }
 
     @Override
-    public boolean doOne(Minecraft mc, Screen screen) {
+    public boolean prepareCut(Minecraft mc, Screen screen) {
         if (mc.player == null || mc.gameMode == null) {
             return false;
         }
-
         StonecutterMenu menu = ((StonecutterScreen) screen).getMenu();
         int containerId = menu.containerId;
         Player player = mc.player;
@@ -95,12 +94,21 @@ public class StonecutterAction implements SpacebarAction {
         lastMaterial = actualMaterial;
         lastRecipeIndex = selected;
 
+        return menu.getSlot(StonecutterMenu.RESULT_SLOT).hasItem();
+    }
+
+    @Override
+    public boolean executeCut(Minecraft mc, Screen screen) {
+        if (mc.player == null || mc.gameMode == null) {
+            return false;
+        }
+        StonecutterMenu menu = ((StonecutterScreen) screen).getMenu();
+        Slot inputSlot = menu.getSlot(StonecutterMenu.INPUT_SLOT);
         if (!menu.getSlot(StonecutterMenu.RESULT_SLOT).hasItem()) {
             return false;
         }
-
         int before = inputSlot.getItem().getCount();
-        mc.gameMode.handleInventoryMouseClick(containerId, StonecutterMenu.RESULT_SLOT, 0, ClickType.QUICK_MOVE, player);
+        mc.gameMode.handleInventoryMouseClick(menu.containerId, StonecutterMenu.RESULT_SLOT, 0, ClickType.QUICK_MOVE, mc.player);
         return inputSlot.getItem().getCount() != before;
     }
 
